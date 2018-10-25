@@ -36,6 +36,15 @@ public class Stack {
 	void setupAlphabet(String[] alphabet) {
 		stackAlphabet = new Alphabet(alphabet);
 	}
+	
+	/**
+	 * Restores the stack.
+	 *
+	 * @param stack the old stack
+	 */
+	void restoreStack(Stack stack){
+		this.stack = new Vector<String>(stack.getStack());
+	}
 
 	/**
 	 * Adds a new symbol to the stack.

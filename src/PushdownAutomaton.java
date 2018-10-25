@@ -97,7 +97,11 @@ public class PushdownAutomaton {
 	 * @param automaton the automaton
 	 */
 	PushdownAutomaton(PushdownAutomaton automaton) {
-		restore(automaton);
+		automatonStack = new Stack(automaton.getAutomatonStack());
+		inputTape = new Stack(automaton.getInputTape());
+		stateSet = new StateSet(automaton.getStateSet());
+		transitionFunctions = new TFLibrary(automaton.getTFLibrary());
+		finalState = isFinalStateType();
 	}
 
 	/**
@@ -106,11 +110,9 @@ public class PushdownAutomaton {
 	 * @param automaton the automaton
 	 */
 	private void restore(PushdownAutomaton automaton) {
-		automatonStack = new Stack(automaton.getAutomatonStack());
-		inputTape = new Stack(automaton.getInputTape());
-		stateSet = new StateSet(automaton.getStateSet());
-		transitionFunctions = new TFLibrary(automaton.getTFLibrary());
-		finalState = isFinalStateType();
+		automatonStack.restoreStack(automaton.getAutomatonStack());
+		inputTape.restoreStack(automaton.getInputTape());
+		stateSet.setCurrentState(automaton.getStateSet().getCurrentState());
 	}
 
 	/**
@@ -184,6 +186,12 @@ public class PushdownAutomaton {
 			else if (viableFunctions.size() > 1) {
 				PushdownAutomaton backup = new PushdownAutomaton(this);
 				while (viableFunctions.size() > 1) {
+					if(verbose){
+						System.out.println("More than one viable function:");
+						for(TransitionFunction tf : viableFunctions)
+							System.out.println(tf.toString());
+						System.out.println("Executing...");
+					}
 					performFunction(viableFunctions.firstElement(), verbose);
 					if (Execute(verbose))
 						return true;
@@ -191,6 +199,10 @@ public class PushdownAutomaton {
 						System.out.println("Incorrect path, going back for another function...");
 					restore(backup);
 					viableFunctions.remove(0);
+					if (verbose){
+						print();
+						System.out.println("Resuming...");
+					}
 				}
 			}
 			performFunction(viableFunctions.firstElement(), verbose);
@@ -255,8 +267,10 @@ public class PushdownAutomaton {
 	 */
 	private void performFunction(TransitionFunction function, boolean verbose) {
 		performFunction(function);
-		if (verbose)
+		if (verbose){
 			print();
+			System.out.println();
+		}
 	}
 
 	/**
