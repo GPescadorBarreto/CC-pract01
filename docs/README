@@ -1,0 +1,9 @@
+This Java application simulates a pushdown automaton in two ways, as a final state automaton and as an emptying stack automaton.
+
+For it to run, you'll need to specify the runtime arguments in the following way:
+
+1. Config file route: This file must have the same format as those in the tests folder.
+2. Final state: If you want to simulate a final state automaton, write 'y'. Write 'n' for an emptying stack automaton.
+3. Verbose: For the application to leave a trace through the Java console, write 'y'. Write 'n' for silent mode.
+4. Input tape entry: If you want to specify the input tape manually through the console, write 'y'. Write 'n' if you want to specify it from a config file.
+5. Input tape file(optional): If you've written 'n' as the 4th parameter, you shall write the input tape config file's path here.
